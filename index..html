@@ -1,0 +1,205 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TikTok Video Downloader | by Ramzan Ahsan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .glow {
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 0 20px rgba(255, 255, 255, 0.6);
+        }
+        .btn-glow {
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.7);
+        }
+        .btn-glow:hover {
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.9);
+        }
+        .social-btn {
+            transition: all 0.3s ease;
+        }
+        .social-btn:hover {
+            transform: translateY(-3px);
+        }
+        .result-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .loading-spinner {
+            border-top-color: #3b82f6;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Header -->
+        <header class="text-center mb-10">
+            <h1 class="text-4xl font-bold mb-2 glow">TikTok Video Downloader</h1>
+            <p class="text-gray-400">Download TikTok videos without watermark</p>
+        </header>
+
+        <!-- Search Bar -->
+        <div class="max-w-2xl mx-auto mb-10">
+            <div class="flex flex-col md:flex-row gap-4">
+                <input 
+                    type="text" 
+                    id="tiktok-url" 
+                    placeholder="Paste TikTok video URL here..." 
+                    class="flex-grow px-4 py-3 rounded-lg bg-gray-800 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                <button 
+                    id="download-btn" 
+                    class="px-6 py-3 bg-blue-600 hover:bg-blue-700 rounded-lg font-medium btn-glow flex items-center justify-center"
+                >
+                    <i class="fas fa-download mr-2"></i> Download
+                </button>
+            </div>
+        </div>
+
+        <!-- Loading Indicator -->
+        <div id="loading" class="hidden flex justify-center mb-10">
+            <div class="loading-spinner h-12 w-12 border-4 border-blue-500 rounded-full"></div>
+        </div>
+
+        <!-- Results Section -->
+        <div id="results" class="hidden max-w-2xl mx-auto mb-10">
+            <div class="result-card rounded-xl p-6 mb-6">
+                <div class="flex flex-col md:flex-row gap-6">
+                    <div class="md:w-1/3">
+                        <img id="video-thumbnail" src="" alt="Video thumbnail" class="w-full rounded-lg">
+                    </div>
+                    <div class="md:w-2/3">
+                        <h2 id="video-title" class="text-xl font-bold mb-2"></h2>
+                        <p id="video-author" class="text-gray-400 mb-4"></p>
+                        <div class="flex flex-wrap gap-3 mb-4">
+                            <span id="video-plays" class="px-3 py-1 bg-gray-800 rounded-full text-sm"></span>
+                            <span id="video-likes" class="px-3 py-1 bg-gray-800 rounded-full text-sm"></span>
+                            <span id="video-comments" class="px-3 py-1 bg-gray-800 rounded-full text-sm"></span>
+                            <span id="video-shares" class="px-3 py-1 bg-gray-800 rounded-full text-sm"></span>
+                        </div>
+                        <div class="flex flex-col sm:flex-row gap-3">
+                            <a id="download-no-watermark" class="px-4 py-2 bg-green-600 hover:bg-green-700 rounded-lg font-medium text-center">
+                                <i class="fas fa-file-video mr-2"></i> No Watermark
+                            </a>
+                            <a id="download-with-watermark" class="px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded-lg font-medium text-center">
+                                <i class="fas fa-file-video mr-2"></i> With Watermark
+                            </a>
+                            <a id="download-music" class="px-4 py-2 bg-yellow-600 hover:bg-yellow-700 rounded-lg font-medium text-center">
+                                <i class="fas fa-music mr-2"></i> Music Only
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Social Buttons -->
+        <div class="max-w-md mx-auto mb-10">
+            <h3 class="text-center text-xl font-semibold mb-4">Join Our Communities</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+
+
+                
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="text-center text-gray-500 text-sm mt-12">
+            <p>© 2025 TikTok Video Downloader. All rights reserved.</p>
+            <p class="mt-1">Developed by <span class="text-blue-400">SaNa Usman</span></p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const downloadBtn = document.getElementById('download-btn');
+            const tiktokUrl = document.getElementById('tiktok-url');
+            const loading = document.getElementById('loading');
+            const results = document.getElementById('results');
+            
+            // Video elements
+            const videoTitle = document.getElementById('video-title');
+            const videoAuthor = document.getElementById('video-author');
+            const videoThumbnail = document.getElementById('video-thumbnail');
+            const videoPlays = document.getElementById('video-plays');
+            const videoLikes = document.getElementById('video-likes');
+            const videoComments = document.getElementById('video-comments');
+            const videoShares = document.getElementById('video-shares');
+            const downloadNoWatermark = document.getElementById('download-no-watermark');
+            const downloadWithWatermark = document.getElementById('download-with-watermark');
+            const downloadMusic = document.getElementById('download-music');
+
+            downloadBtn.addEventListener('click', async function() {
+                const url = tiktokUrl.value.trim();
+                
+                if (!url) {
+                    alert('Please enter a TikTok video URL');
+                    return;
+                }
+                
+                if (!url.includes('tiktok.com')) {
+                    alert('Please enter a valid TikTok video URL');
+                    return;
+                }
+                
+                try {
+                    // Show loading, hide results
+                    loading.classList.remove('hidden');
+                    results.classList.add('hidden');
+                    
+                    // Fetch data from API
+                    const response = await fetch(`https://tikwm.com/api/?url=${encodeURIComponent(url)}`);
+                    const data = await response.json();
+                    
+                    if (data.code !== 0) {
+                        throw new Error(data.msg || 'Failed to fetch video data');
+                    }
+                    
+                    // Populate the results
+                    videoTitle.textContent = data.data.title || 'Untitled';
+                    videoAuthor.textContent = `By ${data.data.author.nickname || 'Unknown'}`;
+                    videoThumbnail.src = data.data.cover;
+                    
+                    // Format numbers
+                    videoPlays.textContent = `👀 ${formatNumber(data.data.play_count)}`;
+                    videoLikes.textContent = `❤️ ${formatNumber(data.data.digg_count)}`;
+                    videoComments.textContent = `💬 ${formatNumber(data.data.comment_count)}`;
+                    videoShares.textContent = `↗️ ${formatNumber(data.data.share_count)}`;
+                    
+                    // Set download links
+                    downloadNoWatermark.href = data.data.play;
+                    downloadWithWatermark.href = data.data.wmplay;
+                    downloadMusic.href = data.data.music;
+                    
+                    // Hide loading, show results
+                    loading.classList.add('hidden');
+                    results.classList.remove('hidden');
+                    
+                } catch (error) {
+                    loading.classList.add('hidden');
+                    alert('Error: ' + error.message);
+                    console.error(error);
+                }
+            });
+            
+            function formatNumber(num) {
+                if (num >= 1000000) {
+                    return (num / 1000000).toFixed(1) + 'M';
+                }
+                if (num >= 1000) {
+                    return (num / 1000).toFixed(1) + 'K';
+                }
+                return num;
+            }
+        });
+    </script>
+</body>
+</html>
